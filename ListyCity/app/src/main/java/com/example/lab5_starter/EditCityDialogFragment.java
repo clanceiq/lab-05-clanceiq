@@ -14,18 +14,20 @@ import androidx.fragment.app.DialogFragment;
 
 import java.util.Objects;
 
-public class CityDialogFragment extends DialogFragment {
-    interface CityDialogListener {
+public class EditCityDialogFragment extends DialogFragment {
+    interface EditCityDialogListener {
         void updateCity(City city, String title, String year);
         void addCity(City city);
+        void deleteCity(City city);
     }
-    private CityDialogListener listener;
 
-    public static CityDialogFragment newInstance(City city){
+    private EditCityDialogListener listener;
+
+    public static EditCityDialogFragment newInstance(City city){
         Bundle args = new Bundle();
         args.putSerializable("City", city);
 
-        CityDialogFragment fragment = new CityDialogFragment();
+        EditCityDialogFragment fragment = new EditCityDialogFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -33,8 +35,8 @@ public class CityDialogFragment extends DialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof CityDialogListener){
-            listener = (CityDialogListener) context;
+        if (context instanceof EditCityDialogListener){
+            listener = (EditCityDialogListener) context;
         }
         else {
             throw new RuntimeException("Implement listener");
@@ -75,6 +77,13 @@ public class CityDialogFragment extends DialogFragment {
                         listener.addCity(new City(title, year));
                     }
                 })
+                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        listener.deleteCity(city);
+                    }
+                })
                 .create();
     }
+
 }
